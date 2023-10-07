@@ -4,6 +4,8 @@ import com.reeceTech.addressBook.controller.AddressBookRestController;
 import com.reeceTech.addressBook.dao.AddressBookRepository;
 import com.reeceTech.addressBook.entities.AddressBook;
 import com.reeceTech.addressBook.services.AddressBookService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,11 @@ public class AddressBookServiceImpl implements AddressBookService {
   Logger logger = LoggerFactory.getLogger(AddressBookRestController.class);
   @Autowired private AddressBookRepository addressBookRepository;
 
+  // For Test Only
+  public AddressBookServiceImpl(AddressBookRepository repo) {
+    this.addressBookRepository = repo;
+  }
+
   /*
       Name: getAllAddressBooks
       Description: fetches all record from the addressbook table
@@ -33,9 +40,13 @@ public class AddressBookServiceImpl implements AddressBookService {
   */
   @Override
   public List<AddressBook> getAllAddressBooks() {
-    List<AddressBook> addressBooks =
-        addressBookRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    logger.info("AddressBooks Found: " + addressBooks.size());
+    List<AddressBook> addressBooks = new ArrayList<>();
+    try {
+      addressBooks.addAll(addressBookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
+      logger.info("AddressBooks Found: " + addressBooks.size());
+    } catch(Exception ex) {
+      logger.info("Exception while adding addressBook: " + ex.getMessage());
+    }
     return addressBooks;
   }
 

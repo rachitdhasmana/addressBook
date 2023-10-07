@@ -25,6 +25,13 @@ public class AddressBookRestController {
 
   @Autowired private AddressBookService addressBookServiceObj;
 
+  // For Test Only
+  public AddressBookRestController(
+          ContactService contactService, AddressBookService addressBookService) {
+    this.contactServiceObj = contactService;
+    this.addressBookServiceObj = addressBookService;
+  }
+
   @PostMapping(value = "", headers = "Accept=application/json")
   @Tag(
       name = "AddressBook API(s)",

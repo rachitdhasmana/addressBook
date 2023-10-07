@@ -29,6 +29,12 @@ public class ContactServiceImpl implements ContactService {
   @Autowired private ContactRepository contactRepository;
   @Autowired private AddressBookRepository addressBookRepository;
 
+  // For Test Only
+  public ContactServiceImpl(ContactRepository contactRepository, AddressBookRepository addressBookRepository) {
+    this.contactRepository = contactRepository;
+    this.addressBookRepository = addressBookRepository;
+  }
+
   /*
       Name: checkIfContactExistsInAddressBook
       Description: checks
