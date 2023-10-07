@@ -1,0 +1,438 @@
+openapi: 3.0.1
+info:
+  title: AddressBook
+  description: An AddressBook implementation using SpringBoot
+  version: "1"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: AddressBook API(s)
+  description: List of API(s) to perform CRUD operation on AddressBook entity.
+- name: Contacts API(s)
+  description: List of API(s) to perform CRUD operation on Contact entity.
+paths:
+  /v1/address-books/{addressBookId}:
+    get:
+      tags:
+      - AddressBook API(s)
+      summary: Get An Address Book Using Address Book Id
+      description: This API fetches an existing address book from the collection by
+        id.
+      operationId: getAddressBookById
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "404":
+          description: "Unsuccessful, Record Not Found"
+          content:
+            '*/*':
+              schema:
+                type: string
+    put:
+      tags:
+      - AddressBook API(s)
+      summary: Update An Address Book Using Address Book Id
+      description: This API allows to update any details for an existing Address Book
+        entity.
+      operationId: updateAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        schema:
+          type: string
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressBook'
+        required: true
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          description: "Unsuccessful, Record Not Found"
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      tags:
+      - AddressBook API(s)
+      summary: Delete An Existing Address Book Using Address Book Id
+      description: "This API allows to delete an already existing Address Book, only\
+        \ if it is empty."
+      operationId: deleteAddressBookById
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "404":
+          description: "Unsuccessful, Record Not Found"
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/address-books/{addressBookId}/contacts/{contactId}:
+    get:
+      tags:
+      - Contacts API(s)
+      summary: Get A Contact From An Address Book Using Contact Id
+      description: This API fetches specific contact (if exists) from an existing
+        Address Book.
+      operationId: getContactByIdInAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "404":
+          description: "Unsuccessful, Record Not Found"
+          content:
+            '*/*':
+              schema:
+                type: string
+    put:
+      tags:
+      - Contacts API(s)
+      summary: Update A Contact In An Address Book Using Contact Id
+      description: This API allows to update any field in a Contact (if exists) in
+        an Address Book.
+      operationId: updateContactInAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: Accept
+        in: header
+        schema:
+          type: string
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          description: "Unsuccessful, Record Not Found"
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      tags:
+      - Contacts API(s)
+      summary: Delete A Contact From An Address Book Using Contact Id
+      description: This API allows to delete a contact (if exists) from an existing
+        Address Book.
+      operationId: deleteContactByIdInAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "404":
+          description: "Unsuccessful, Record Not Found"
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/address-books:
+    get:
+      tags:
+      - AddressBook API(s)
+      summary: Get List Of All Address Books
+      description: "This API fetches a list of existing address books from the collection,\
+        \ sorted(ASC) by id."
+      operationId: getAllAddressBooks
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "204":
+          description: No Content (empty list) to return
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+      - AddressBook API(s)
+      summary: Add New Address Book
+      description: This API allows to add a new Address Book to the existing collection.
+      operationId: addNewAddressBook
+      parameters:
+      - name: Accept
+        in: header
+        schema:
+          type: string
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressBook'
+        required: true
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: "Unsuccessful, Bad Request"
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/address-books/{addressBookId}/contacts:
+    get:
+      tags:
+      - Contacts API(s)
+      summary: Get A List Of All Contacts From An Address Book
+      description: This API fetches list of all contacts from an existing Address
+        Book.
+      operationId: getAllContactsInAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "204":
+          description: No Content (empty list) to return
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+      - Contacts API(s)
+      summary: Add A Contact To An Address Book
+      description: This API allows to add a new contact to an existing Address Book.
+      operationId: addContactInAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        schema:
+          type: string
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: "Unsuccessful, violates uniqueness or foreign key constraint."
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/address-books/{addressBookId}/contacts/search:
+    get:
+      tags:
+      - Contacts API(s)
+      summary: Search Contacts By Either First or Last Name In An Address Book
+      description: This API fetches all contacts with first name or last name matching
+        to the search field from an Address Book.
+      operationId: getContactsBySearchFieldInOneAddressBook
+      parameters:
+      - name: addressBookId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "204":
+          description: No Content (empty list) to return
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/address-books/contacts:
+    get:
+      tags:
+      - Contacts API(s)
+      summary: Get All unique Contacts Across All Address Books
+      description: This API fetches only unique contacts from all existing Address
+        Books.
+      operationId: getUniqueContactsInAllAddressBooks
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "204":
+          description: No Content (empty list) to return
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/address-books/contacts/search:
+    get:
+      tags:
+      - Contacts API(s)
+      summary: Search Contacts By Either First or Last Name In All Address Book
+      description: This API fetches all contacts with first name or last name matching
+        to the search field from all Address Books.
+      operationId: getContactsBySearchFieldInAllAddressBooks
+      parameters:
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful request
+          content:
+            '*/*':
+              schema:
+                type: string
+        "204":
+          description: No Content (empty list) to return
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    AddressBook:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNumber:
+          type: string
+        landLine:
+          type: string
+        addressBook:
+          $ref: '#/components/schemas/AddressBook'
