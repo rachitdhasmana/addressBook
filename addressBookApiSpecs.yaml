@@ -97,8 +97,8 @@ paths:
             '*/*':
               schema:
                 type: string
-        "404":
-          description: "Unsuccessful, Record Not Found"
+        "400":
+          description: "Unsuccessful, doesn't exist or violates foreign key constraints"
           content:
             '*/*':
               schema:
