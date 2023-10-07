@@ -38,19 +38,19 @@ AddressBook requires following dependencies to run manually.
 
 Install the dependencies and devDependencies and start the server.
 
-Cloning the code
+### Cloning the code
 ```
 git clone https://github.com/rachitdhasmana/addressBook.git
 ```
 
-Once Cloned, got to the root folder and run maven build.
-
+### Once Cloned, got to the root folder and run maven build.
 ```
 cd addressBook
 mvn install
 ```
 This should generate a jar file in addressBook/target location. 
-Run the jar file. 
+
+### Run the jar file. 
 ```
 java -jar target/addressBook-0.0.1.jar
 ```
@@ -71,7 +71,7 @@ http://127.0.0.1:8080/h2-console
 Driver Class: org.h2.Driver
 JDBC URL: jdbc:h2:mem:testdb
 User Name: sa
-PAssword:
+PAssword: passw0rded!
 ```
 
 ## Running the code using hosted docker image
