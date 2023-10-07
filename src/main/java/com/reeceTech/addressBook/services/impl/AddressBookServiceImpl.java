@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -82,7 +83,7 @@ public class AddressBookServiceImpl implements AddressBookService {
       }
       logger.warn(
           "Address Book {addressBook} does not exists!".replace("addressBook", addressBookId));
-    } catch (IllegalArgumentException | JpaSystemException ex) {
+    } catch (IllegalArgumentException | JpaSystemException | DataIntegrityViolationException ex) {
       logger.error("Exception while deleting addressBook: " + ex.getMessage());
     }
     return false;

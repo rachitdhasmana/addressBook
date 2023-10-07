@@ -58,14 +58,19 @@ public class AddressBookRestController {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "Successful request"),
-        @ApiResponse(responseCode = "404", description = "Unsuccessful, Record Not Found")
+        @ApiResponse(
+            responseCode = "400",
+            description = "Unsuccessful, doesn't exist or violates foreign key constraints")
       })
   public ResponseEntity deleteAddressBookById(@PathVariable final String addressBookId) {
     boolean isDeleted = addressBookServiceObj.deleteAddressBookById(addressBookId);
     if (isDeleted) {
       return new ResponseEntity<>("AddressBook has been successfully deleted.", HttpStatus.OK);
     } else {
-      return new ResponseEntity<>("Unable to delete AddressBook, Not Found.", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(
+          "Unable to delete AddressBook, resource doesn't exist or "
+              + "deletion violates foreign key constraints",
+          HttpStatus.BAD_REQUEST);
     }
   }
 
