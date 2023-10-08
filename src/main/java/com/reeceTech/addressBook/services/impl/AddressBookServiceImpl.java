@@ -4,7 +4,6 @@ import com.reeceTech.addressBook.controller.AddressBookRestController;
 import com.reeceTech.addressBook.dao.AddressBookRepository;
 import com.reeceTech.addressBook.entities.AddressBook;
 import com.reeceTech.addressBook.services.AddressBookService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +43,7 @@ public class AddressBookServiceImpl implements AddressBookService {
     try {
       addressBooks.addAll(addressBookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
       logger.info("AddressBooks Found: " + addressBooks.size());
-    } catch(Exception ex) {
+    } catch (Exception ex) {
       logger.info("Exception while adding addressBook: " + ex.getMessage());
     }
     return addressBooks;
@@ -111,6 +110,12 @@ public class AddressBookServiceImpl implements AddressBookService {
   @Override
   public AddressBook addNewAddressBook(AddressBook addressBook) {
     try {
+      if (addressBookRepository.existsById(addressBook.getId())) {
+        logger.warn(
+            "Address Book with id {addressBookId} already exists!"
+                .replace("addressBookId", addressBook.getId()));
+        return null;
+      }
       AddressBook savedAddressBook = addressBookRepository.save(addressBook);
       logger.info("Address Book {addressBook} saved!".replace("addressBook", addressBook.getId()));
       return savedAddressBook;

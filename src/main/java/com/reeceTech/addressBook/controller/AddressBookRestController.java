@@ -27,7 +27,7 @@ public class AddressBookRestController {
 
   // For Test Only
   public AddressBookRestController(
-          ContactService contactService, AddressBookService addressBookService) {
+      ContactService contactService, AddressBookService addressBookService) {
     this.contactServiceObj = contactService;
     this.addressBookServiceObj = addressBookService;
   }

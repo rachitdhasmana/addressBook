@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Contact implements Serializable {
-  @Id @Column @GeneratedValue private Long id;
+  @Id
+  @Column(unique = true, nullable = false)
+  @GeneratedValue
+  private Long id;
+
   @Column private String firstName;
   @Column private String lastName;
   @Column private String mobileNumber;

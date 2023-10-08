@@ -1,8 +1,6 @@
 package com.reeceTech.addressBook.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressBook implements Serializable {
-  @Id @Column private String id;
+  @Id
+  @Column(unique = true, length = 20, nullable = false)
+  private String id;
 
   @Column private String name;
 

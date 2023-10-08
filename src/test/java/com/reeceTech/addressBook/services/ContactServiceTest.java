@@ -90,10 +90,10 @@ public class ContactServiceTest {
   void testAddContactInAddressBookWhenNoAddressBookExists() {
     String addressBookId = "not-present";
     AddressBook addressBookMock =
-            new AddressBook(addressBookId, "off_name", "my official address book");
+        new AddressBook(addressBookId, "off_name", "my official address book");
     Contact contactMock =
-            new Contact(
-                    1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
+        new Contact(
+            1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
 
     Mockito.when(addressBookRepository.existsById(addressBookId)).thenReturn(false);
 
@@ -105,10 +105,10 @@ public class ContactServiceTest {
   void testAddContactInAddressBookWhenExceptionThrown() {
     String addressBookId = "official";
     AddressBook addressBookMock =
-            new AddressBook(addressBookId, "off_name", "my official address book");
+        new AddressBook(addressBookId, "off_name", "my official address book");
     Contact contactMock =
-            new Contact(
-                    1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
+        new Contact(
+            1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
 
     mockCheckIfContactExistsInAddressBookWhenAbsent(addressBookId, contactMock);
 
@@ -183,7 +183,7 @@ public class ContactServiceTest {
   void testGetAllContactsInAddressBookWhenExceptionThrown() {
     String addressBookId = "official";
     Mockito.when(contactRepository.findByAddressBookId(addressBookId))
-            .thenThrow(new IllegalArgumentException());
+        .thenThrow(new IllegalArgumentException());
 
     List<Contact> contactsList = contactService.getAllContactsInAddressBook(addressBookId);
     assertThat(contactsList).isEmpty();
@@ -209,7 +209,8 @@ public class ContactServiceTest {
 
   @Test
   void testGetUniqueContactsInAllAddressBooksWhenExceptionThrown() {
-    Mockito.when(contactRepository.findAllDistinctContacts()).thenThrow(new IllegalArgumentException());
+    Mockito.when(contactRepository.findAllDistinctContacts())
+        .thenThrow(new IllegalArgumentException());
     List<Contact> contactsList = contactService.getUniqueContactsInAllAddressBooks();
     assertThat(contactsList).isEmpty();
   }
@@ -253,10 +254,10 @@ public class ContactServiceTest {
     String firstName = "Rachit";
 
     Mockito.when(
-                    contactRepository.findByFirstNameIgnoreCaseOrLastNameIgnoreCase(firstName, firstName))
-            .thenThrow(new IllegalArgumentException());
+            contactRepository.findByFirstNameIgnoreCaseOrLastNameIgnoreCase(firstName, firstName))
+        .thenThrow(new IllegalArgumentException());
     List<Contact> contactsList =
-            contactService.getContactsBySearchFieldInAllAddressBooks(firstName);
+        contactService.getContactsBySearchFieldInAllAddressBooks(firstName);
     assertThat(contactsList).isEmpty();
   }
 
@@ -359,11 +360,11 @@ public class ContactServiceTest {
     String firstName = "Rachit";
 
     Mockito.when(
-                    contactRepository.findByAddressBookIdAndFirstNameIgnoreCase(addressBookId, firstName))
-            .thenThrow(new IllegalArgumentException());
+            contactRepository.findByAddressBookIdAndFirstNameIgnoreCase(addressBookId, firstName))
+        .thenThrow(new IllegalArgumentException());
 
     List<Contact> contactsList =
-            contactService.getContactsBySearchFieldInOneAddressBook(addressBookId, firstName);
+        contactService.getContactsBySearchFieldInOneAddressBook(addressBookId, firstName);
     assertThat(contactsList).isEmpty();
   }
 
@@ -444,10 +445,10 @@ public class ContactServiceTest {
   void testUpdateContactInAddressBookWhenNoAddressBook() {
     String addressBookId = "not-present";
     AddressBook addressBookMock =
-            new AddressBook(addressBookId, "off_name", "my official address book");
+        new AddressBook(addressBookId, "off_name", "my official address book");
     Contact contactMock =
-            new Contact(
-                    1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
+        new Contact(
+            1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
 
     Mockito.when(contactRepository.findById(1l)).thenReturn(Optional.of(contactMock));
     mockCheckIfContactExistsInAddressBookWhenAbsent(addressBookId, contactMock);
@@ -461,10 +462,10 @@ public class ContactServiceTest {
   void testUpdateContactInAddressBookWhenExceptionThrown() {
     String addressBookId = "official";
     AddressBook addressBookMock =
-            new AddressBook(addressBookId, "off_name", "my official address book");
+        new AddressBook(addressBookId, "off_name", "my official address book");
     Contact contactMock =
-            new Contact(
-                    1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
+        new Contact(
+            1l, "Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX", addressBookMock);
 
     Mockito.when(contactRepository.findById(1l)).thenThrow(new IllegalArgumentException());
 

@@ -184,15 +184,18 @@ public class AddressBookRestControllerUnitTest {
   void testDeleteContactByIdInAddressBookWhenPresent() {
     String addressBookId = "official";
     Mockito.when(contactService.deleteContactByIdInAddressBook(addressBookId, 1l)).thenReturn(true);
-    ResponseEntity response = addressBookRestController.deleteContactByIdInAddressBook(addressBookId, 1l);
+    ResponseEntity response =
+        addressBookRestController.deleteContactByIdInAddressBook(addressBookId, 1l);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
   @Test
   void testDeleteContactByIdInAddressBookWhenAbsent() {
     String addressBookId = "official";
-    Mockito.when(contactService.deleteContactByIdInAddressBook(addressBookId, 1l)).thenReturn(false);
-    ResponseEntity response = addressBookRestController.deleteContactByIdInAddressBook(addressBookId, 1l);
+    Mockito.when(contactService.deleteContactByIdInAddressBook(addressBookId, 1l))
+        .thenReturn(false);
+    ResponseEntity response =
+        addressBookRestController.deleteContactByIdInAddressBook(addressBookId, 1l);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
@@ -200,9 +203,11 @@ public class AddressBookRestControllerUnitTest {
   void testGetContactByIdWhenPresent() {
     String addressBookId = "official";
     Contact contactMock = new Contact("Rachit", "Dhasmana", "+61 4XX XXX XXX", "+61 4XX XXX XXX");
-    Mockito.when(contactService.getContactByIdInAddressBook(addressBookId, 1l)).thenReturn(contactMock);
+    Mockito.when(contactService.getContactByIdInAddressBook(addressBookId, 1l))
+        .thenReturn(contactMock);
 
-    ResponseEntity response = addressBookRestController.getContactByIdInAddressBook(addressBookId, 1l);
+    ResponseEntity response =
+        addressBookRestController.getContactByIdInAddressBook(addressBookId, 1l);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat((Contact) response.getBody()).isNotNull();
   }
@@ -212,7 +217,8 @@ public class AddressBookRestControllerUnitTest {
     String addressBookId = "official";
     Mockito.when(contactService.getContactByIdInAddressBook(addressBookId, 1l)).thenReturn(null);
 
-    ResponseEntity response = addressBookRestController.getContactByIdInAddressBook(addressBookId, 1l);
+    ResponseEntity response =
+        addressBookRestController.getContactByIdInAddressBook(addressBookId, 1l);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 

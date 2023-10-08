@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
-import org.springframework.orm.jpa.JpaSystemException;
 
 @ExtendWith(MockitoExtension.class)
 public class AddressBookServiceTest {
@@ -54,7 +53,7 @@ public class AddressBookServiceTest {
   @Test
   void testGetAllAddressBooksWhenExceptionThrown() {
     Mockito.when(addressBookRepository.findAll(Sort.by(Sort.Direction.ASC, "id")))
-            .thenThrow(new IllegalArgumentException());
+        .thenThrow(new IllegalArgumentException());
 
     List<AddressBook> addresseBooks = addressBookService.getAllAddressBooks();
     assertThat(addresseBooks.size()).isEqualTo(0);
@@ -79,10 +78,10 @@ public class AddressBookServiceTest {
     assertThat(addressBook).isNull();
   }
 
-
   @Test
   void testGetAddressBookByIdWhenExceptionThrown() {
-    Mockito.when(addressBookRepository.findById("personal")).thenThrow(new IllegalArgumentException());
+    Mockito.when(addressBookRepository.findById("personal"))
+        .thenThrow(new IllegalArgumentException());
 
     AddressBook addressBook = addressBookService.getAddressBookById("personal");
     assertThat(addressBook).isNull();
@@ -104,7 +103,8 @@ public class AddressBookServiceTest {
 
   @Test
   void testDeleteAddressBookByIdWhenExceptionThrown() {
-    Mockito.when(addressBookRepository.existsById("official")).thenThrow(new IllegalArgumentException());
+    Mockito.when(addressBookRepository.existsById("official"))
+        .thenThrow(new IllegalArgumentException());
     boolean deleted = addressBookService.deleteAddressBookById("official");
     assertThat(deleted).isFalse();
   }
@@ -125,6 +125,16 @@ public class AddressBookServiceTest {
         new AddressBook("official", "off_name", "my official address book");
     Mockito.when(addressBookRepository.save(addressBookMock))
         .thenThrow(new IllegalArgumentException());
+
+    AddressBook addressBook = addressBookService.addNewAddressBook(addressBookMock);
+    assertThat(addressBook).isNull();
+  }
+
+  @Test
+  void testAddNewAddressBookWhenRecordAlreadyExists() {
+    AddressBook addressBookMock =
+        new AddressBook("official", "off_name", "my official address book");
+    Mockito.when(addressBookRepository.existsById(addressBookMock.getId())).thenReturn(true);
 
     AddressBook addressBook = addressBookService.addNewAddressBook(addressBookMock);
     assertThat(addressBook).isNull();
@@ -154,8 +164,9 @@ public class AddressBookServiceTest {
   @Test
   void testUpdateAddressBookWhenExceptionThrown() {
     AddressBook addressBookMock =
-            new AddressBook("official", "off_name", "my official address book");
-    Mockito.when(addressBookRepository.findById("official")).thenThrow(new IllegalArgumentException());
+        new AddressBook("official", "off_name", "my official address book");
+    Mockito.when(addressBookRepository.findById("official"))
+        .thenThrow(new IllegalArgumentException());
 
     AddressBook addressBook = addressBookService.updateAddressBook("official", addressBookMock);
     assertThat(addressBook).isNull();
