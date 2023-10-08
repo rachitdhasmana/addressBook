@@ -100,3 +100,6 @@ docker run -d -p 8080:8080 address-book
 
 ### H2 DB UI
 ![img.png](H2UI.png)
+
+### Unit test code Coverage
+![img.png](codeCoverage.png)
