@@ -2,8 +2,7 @@ package com.reeceTech.addressBook.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +47,9 @@ public class AddressBookRestControllerIntegrationTest {
         .andExpect(jsonPath("$.id", is("official-new")))
         .andExpect(jsonPath("$.name", is("off_name_new")))
         .andExpect(jsonPath("$.description", is("my new official address book")));
+
+    // Clean up
+    addressBookService.deleteAddressBookById("official-new");
   }
 
   @Test
@@ -64,6 +66,9 @@ public class AddressBookRestControllerIntegrationTest {
 
         // Validate the response code and content type
         .andExpect(status().isBadRequest());
+
+    // Clean up
+    addressBookService.deleteAddressBookById("official");
   }
 
   @Test
@@ -82,6 +87,9 @@ public class AddressBookRestControllerIntegrationTest {
         .andExpect(jsonPath("$[0].id", is("official")))
         .andExpect(jsonPath("$[0].name", is("off_name")))
         .andExpect(jsonPath("$[0].description", is("my official address book")));
+
+    // Clean up
+    addressBookService.deleteAddressBookById("official");
   }
 
   @Test
@@ -94,6 +102,110 @@ public class AddressBookRestControllerIntegrationTest {
 
         // Validate the returned fields
         .andExpect(jsonPath("$", hasSize(0)));
+  }
+
+  @Test
+  public void testGetAddressBookByIdAPIWhenData() throws Exception {
+    AddressBook addressBook =
+        new AddressBook("official-getid", "off_name", "my official address book");
+    addressBookService.addNewAddressBook(addressBook);
+
+    mockMvc
+        .perform(get("/v1/address-books/official-getid"))
+        // Validate the response code and content type
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+
+        // Validate the returned fields
+        .andExpect(jsonPath("$.id", is("official-getid")))
+        .andExpect(jsonPath("$.name", is("off_name")))
+        .andExpect(jsonPath("$.description", is("my official address book")));
+
+    // Clean up
+    addressBookService.deleteAddressBookById("official-getid");
+  }
+
+  @Test
+  public void testGetAddressBookByIdAPIWhenNoData() throws Exception {
+    mockMvc
+        .perform(get("/v1/address-books/official-no-getid"))
+        // Validate the response code and content type
+        .andExpect(status().isNotFound())
+        .andExpect(content().string("Unable to find the Address Book."));
+  }
+
+  @Test
+  public void testDeleteAddressBookByIdAPIWhenData() throws Exception {
+    AddressBook addressBook =
+        new AddressBook("official-del", "off_name", "my official address book");
+    addressBookService.addNewAddressBook(addressBook);
+
+    mockMvc
+        .perform(delete("/v1/address-books/official-del"))
+        // Validate the response code and content type
+        .andExpect(status().isOk())
+        .andExpect(content().string("AddressBook has been successfully deleted."));
+  }
+
+  @Test
+  public void testDeleteAddressBookByIdAPIWhenNoData() throws Exception {
+    mockMvc
+        .perform(delete("/v1/address-books/official-del"))
+        // Validate the response code and content type
+        .andExpect(status().isBadRequest())
+        .andExpect(
+            content()
+                .string(
+                    "Unable to delete AddressBook, resource doesn't exist or "
+                        + "deletion violates foreign key constraints"));
+  }
+
+  @Test
+  void testUpdateAddressBookAPISuccess() throws Exception {
+    AddressBook addressBook =
+        new AddressBook("official-update", "off_name", "my official address book");
+    addressBookService.addNewAddressBook(addressBook);
+
+    AddressBook updatedAddressBook =
+        new AddressBook(
+            "official-update", "off_name_new_name", "my new desc for official address book");
+
+    // Execute the POST request
+    mockMvc
+        .perform(
+            put("/v1/address-books/official-update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(updatedAddressBook)))
+
+        // Validate the response code and content type
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+
+        // Validate the returned fields
+        .andExpect(jsonPath("$.id", is("official-update")))
+        .andExpect(jsonPath("$.name", is("off_name_new_name")))
+        .andExpect(jsonPath("$.description", is("my new desc for official address book")));
+
+    // Clean up
+    addressBookService.deleteAddressBookById("official-update");
+  }
+
+  @Test
+  void testUpdateAddressBookAPIFailure() throws Exception {
+    AddressBook updatedAddressBook =
+        new AddressBook(
+            "official-no-new", "off_name_new_name", "my new desc for official address book");
+
+    // Execute the POST request
+    mockMvc
+        .perform(
+            put("/v1/address-books/official-no-new")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(updatedAddressBook)))
+
+        // Validate the response code and content type
+        .andExpect(status().isNotFound())
+        .andExpect(content().string("Unable to update addressBook, addressBook does not exist."));
   }
 
   static String asJsonString(final Object obj) {
