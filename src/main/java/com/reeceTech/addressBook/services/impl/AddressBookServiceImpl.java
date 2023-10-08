@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -119,7 +120,10 @@ public class AddressBookServiceImpl implements AddressBookService {
       AddressBook savedAddressBook = addressBookRepository.save(addressBook);
       logger.info("Address Book {addressBook} saved!".replace("addressBook", addressBook.getId()));
       return savedAddressBook;
-    } catch (IllegalArgumentException | OptimisticLockingFailureException | JpaSystemException ex) {
+    } catch (IllegalArgumentException
+        | OptimisticLockingFailureException
+        | JpaSystemException
+        | InvalidDataAccessApiUsageException ex) {
       logger.error("Exception while deleting addressBook: " + ex.getMessage());
     }
     return null;

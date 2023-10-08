@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
@@ -91,7 +92,10 @@ public class ContactServiceImpl implements ContactService {
               .replace("contactName", contact.getFirstName() + " " + contact.getLastName())
               .replace("addressBookId", addressBookId));
       return savedContact;
-    } catch (IllegalArgumentException | OptimisticLockingFailureException | JpaSystemException ex) {
+    } catch (IllegalArgumentException
+        | OptimisticLockingFailureException
+        | JpaSystemException
+        | InvalidDataAccessApiUsageException ex) {
       logger.error("Exception while adding new contact: " + ex.getMessage());
     }
     return null;
