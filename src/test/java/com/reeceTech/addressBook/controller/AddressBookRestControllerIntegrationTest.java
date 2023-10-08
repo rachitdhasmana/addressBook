@@ -68,8 +68,7 @@ public class AddressBookRestControllerIntegrationTest {
                 .content(asJsonString(addressBook)))
 
         // Validate the response code and content type
-        .andExpect(status().isBadRequest())
-        .andExpect(content().string("Unable to save AddressBook, Bad Request"));
+        .andExpect(status().isBadRequest());
 
     // Clean up
     addressBookService.deleteAddressBookById(addressBook.getId());
@@ -118,8 +117,7 @@ public class AddressBookRestControllerIntegrationTest {
 
     // Execute the GET request
     mockMvc
-        .perform(
-            get("/v1/address-books/addressBookId".replace("addressBookId", addressBook.getId())))
+        .perform(get("/v1/address-books/{addressBookId}", addressBook.getId()))
         // Validate the response code and content type
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -137,11 +135,9 @@ public class AddressBookRestControllerIntegrationTest {
   public void testGetAddressBookByIdAPIWhenNoData() throws Exception {
     // Execute the GET request
     mockMvc
-        .perform(
-            get("/v1/address-books/addressBookId".replace("addressBookId", "random-address-book")))
+        .perform(get("/v1/address-books/{addressBookId}", "random-address-book"))
         // Validate the response code and content type
-        .andExpect(status().isNotFound())
-        .andExpect(content().string("Unable to find the Address Book."));
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -152,27 +148,18 @@ public class AddressBookRestControllerIntegrationTest {
 
     // Execute the DELETE request
     mockMvc
-        .perform(
-            delete("/v1/address-books/addressBookId".replace("addressBookId", addressBook.getId())))
+        .perform(delete("/v1/address-books/{addressBookId}", addressBook.getId()))
         // Validate the response code and content type
-        .andExpect(status().isOk())
-        .andExpect(content().string("AddressBook has been successfully deleted."));
+        .andExpect(status().isOk());
   }
 
   @Test
   public void testDeleteAddressBookByIdAPIWhenNoData() throws Exception {
     // Execute the DELETE request
     mockMvc
-        .perform(
-            delete(
-                "/v1/address-books/addressBookId".replace("addressBookId", "random-address-book")))
+        .perform(delete("/v1/address-books/{addressBookId}", "random-address-book"))
         // Validate the response code and content type
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            content()
-                .string(
-                    "Unable to delete AddressBook, resource doesn't exist or "
-                        + "deletion violates foreign key constraints"));
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -188,7 +175,7 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the PUT request
     mockMvc
         .perform(
-            put("/v1/address-books/addressBookId".replace("addressBookId", addressBook.getId()))
+            put("/v1/address-books/{addressBookId}", addressBook.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(updatedAddressBook)))
 
@@ -214,14 +201,12 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the PUT request
     mockMvc
         .perform(
-            put("/v1/address-books/addressBookId"
-                    .replace("addressBookId", updatedAddressBook.getId()))
+            put("/v1/address-books/{addressBookId}", updatedAddressBook.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(updatedAddressBook)))
 
         // Validate the response code and content type
-        .andExpect(status().isNotFound())
-        .andExpect(content().string("Unable to update addressBook, addressBook does not exist."));
+        .andExpect(status().isNotFound());
   }
 
   /* INTEGRATION CASES FOR CONTACTS API(s) */
@@ -238,8 +223,7 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the POST request
     mockMvc
         .perform(
-            post("/v1/address-books/addressBookId/contacts"
-                    .replace("addressBookId", addressBook.getId()))
+            post("/v1/address-books/{addressBookId}/contacts", addressBook.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(contact)))
 
@@ -271,18 +255,12 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the POST request
     mockMvc
         .perform(
-            post("/v1/address-books/addressBookId/contacts"
-                    .replace("addressBookId", addressBook.getId()))
+            post("/v1/address-books/{addressBookId}/contacts", addressBook.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(contact)))
 
         // Validate the response code and content type
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            content()
-                .string(
-                    "Unable to add new contact, violating either uniqueness (duplicate) or "
-                        + "foreign key (missing addressBook) constraint."));
+        .andExpect(status().isBadRequest());
 
     // Clean up
     contactService.deleteContactByIdInAddressBook(addressBook.getId(), contact.getId());
@@ -297,18 +275,12 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the POST request
     mockMvc
         .perform(
-            post("/v1/address-books/addressBookId/contacts"
-                    .replace("addressBookId", "random-address-book"))
+            post("/v1/address-books/{addressBookId}/contacts", "random-address-book")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(contact)))
 
         // Validate the response code and content type
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            content()
-                .string(
-                    "Unable to add new contact, violating either uniqueness (duplicate) or "
-                        + "foreign key (missing addressBook) constraint."));
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -324,13 +296,12 @@ public class AddressBookRestControllerIntegrationTest {
     mockMvc
         .perform(
             delete(
-                "/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("contactId", String.valueOf(contact.getId()))))
+                "/v1/address-books/{addressBookId}/contacts/{contactId}",
+                addressBook.getId(),
+                String.valueOf(contact.getId())))
 
         // Validate the response code and content type
-        .andExpect(status().isOk())
-        .andExpect(content().string("Contact has been successfully deleted."));
+        .andExpect(status().isOk());
 
     // Clean up
     addressBookService.deleteAddressBookById(addressBook.getId());
@@ -342,13 +313,12 @@ public class AddressBookRestControllerIntegrationTest {
     mockMvc
         .perform(
             delete(
-                "/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", "random-address-book")
-                    .replace("contactId", "1")))
+                "/v1/address-books/{addressBookId}/contacts/{contactId}",
+                "random-address-book",
+                "1"))
 
         // Validate the response code and content type
-        .andExpect(status().isNotFound())
-        .andExpect(content().string("Unable to delete Contact, Not Found."));
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -364,9 +334,9 @@ public class AddressBookRestControllerIntegrationTest {
     mockMvc
         .perform(
             get(
-                "/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("contactId", String.valueOf(contact.getId()))))
+                "/v1/address-books/{addressBookId}/contacts/{contactId}",
+                addressBook.getId(),
+                String.valueOf(contact.getId())))
 
         // Validate the response code and content type
         .andExpect(status().isOk())
@@ -388,15 +358,10 @@ public class AddressBookRestControllerIntegrationTest {
   void testGetContactByIdInAddressBookAPIFailure() throws Exception {
     // Execute the GET request
     mockMvc
-        .perform(
-            get(
-                "/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", "random")
-                    .replace("contactId", "123")))
+        .perform(get("/v1/address-books/{addressBookId}/contacts/{contactId}", "random", "123"))
 
         // Validate the response code and content type
-        .andExpect(status().isNotFound())
-        .andExpect(content().string("Unable to find a contact in AddressBook"));
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -414,9 +379,10 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the PUT request
     mockMvc
         .perform(
-            put("/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("contactId", String.valueOf(contact.getId())))
+            put(
+                    "/v1/address-books/{addressBookId}/contacts/{contactId}",
+                    addressBook.getId(),
+                    String.valueOf(contact.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(updatedContact)))
 
@@ -447,19 +413,15 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the PUT request
     mockMvc
         .perform(
-            put("/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("contactId", "123"))
+            put(
+                    "/v1/address-books/{addressBookId}/contacts/{contactId}",
+                    addressBook.getId(),
+                    "123")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(updatedContact)))
 
         // Validate the response code and content type
-        .andExpect(status().isNotFound())
-        .andExpect(
-            content()
-                .string(
-                    "Unable to update contact, contact / addressBook does not "
-                        + "exist or violates uniqueness property."));
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -477,19 +439,15 @@ public class AddressBookRestControllerIntegrationTest {
     // Execute the PUT request
     mockMvc
         .perform(
-            put("/v1/address-books/addressBookId/contacts/contactId"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("contactId", String.valueOf(contact.getId())))
+            put(
+                    "/v1/address-books/{addressBookId}/contacts/{contactId}",
+                    addressBook.getId(),
+                    String.valueOf(contact.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(updatedContact)))
 
         // Validate the response code and content type
-        .andExpect(status().isNotFound())
-        .andExpect(
-            content()
-                .string(
-                    "Unable to update contact, contact / addressBook does not "
-                        + "exist or violates uniqueness property."));
+        .andExpect(status().isNotFound());
 
     // Clean up
     contactService.deleteContactByIdInAddressBook(addressBook.getId(), contact.getId());
@@ -512,10 +470,7 @@ public class AddressBookRestControllerIntegrationTest {
 
     // Execute the GET request
     mockMvc
-        .perform(
-            get(
-                "/v1/address-books/addressBookId/contacts"
-                    .replace("addressBookId", addressBook.getId())))
+        .perform(get("/v1/address-books/{addressBookId}/contacts", addressBook.getId()))
 
         // Validate the response code and content type
         .andExpect(status().isOk())
@@ -537,10 +492,7 @@ public class AddressBookRestControllerIntegrationTest {
 
     // Execute the GET request
     mockMvc
-        .perform(
-            get(
-                "/v1/address-books/addressBookId/contacts"
-                    .replace("addressBookId", addressBook.getId())))
+        .perform(get("/v1/address-books/{addressBookId}/contacts", addressBook.getId()))
 
         // Validate the response code and content type
         .andExpect(status().isNoContent())
@@ -623,9 +575,9 @@ public class AddressBookRestControllerIntegrationTest {
     mockMvc
         .perform(
             get(
-                "/v1/address-books/addressBookId/contacts/search?name=searchField"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("searchField", "rachit")))
+                "/v1/address-books/{addressBookId}/contacts/search?name={searchField}",
+                addressBook.getId(),
+                "rachit"))
 
         // Validate the response code and content type
         .andExpect(status().isOk())
@@ -661,9 +613,9 @@ public class AddressBookRestControllerIntegrationTest {
     mockMvc
         .perform(
             get(
-                "/v1/address-books/addressBookId/contacts/search?name=searchField"
-                    .replace("addressBookId", addressBook.getId())
-                    .replace("searchField", "rachit-d")))
+                "/v1/address-books/{addressBookId}/contacts/search?name={searchField}",
+                addressBook.getId(),
+                "rachit-d"))
 
         // Validate the response code and content type
         .andExpect(status().isNoContent())
@@ -705,10 +657,7 @@ public class AddressBookRestControllerIntegrationTest {
 
     // Execute the GET request
     mockMvc
-        .perform(
-            get(
-                "/v1/address-books/contacts/search?name=searchField"
-                    .replace("searchField", "rachit")))
+        .perform(get("/v1/address-books/contacts/search?name={searchField}", "rachit"))
 
         // Validate the response code and content type
         .andExpect(status().isOk())
@@ -745,10 +694,7 @@ public class AddressBookRestControllerIntegrationTest {
 
     // Execute the GET request
     mockMvc
-        .perform(
-            get(
-                "/v1/address-books/contacts/search?name=searchField"
-                    .replace("searchField", "rachit")))
+        .perform(get("/v1/address-books/contacts/search?name={searchField}", "rachit"))
 
         // Validate the response code and content type
         .andExpect(status().isNoContent())

@@ -1,0 +1,447 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AddressBookRestController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.reeceTech.addressBook.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: AddressBookRestController (com.reeceTech.addressBook.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AddressBookRestController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (58/58)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.reeceTech.addressBook.controller;
+&nbsp;
+&nbsp;import com.reeceTech.addressBook.entities.AddressBook;
+&nbsp;import com.reeceTech.addressBook.entities.Contact;
+&nbsp;import com.reeceTech.addressBook.services.AddressBookService;
+&nbsp;import com.reeceTech.addressBook.services.ContactService;
+&nbsp;import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponses;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import java.util.List;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.lang.NonNull;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/v1/address-books&quot;)
+&nbsp;@OpenAPIDefinition
+&nbsp;public class AddressBookRestController {
+&nbsp;
+&nbsp;  @Autowired private ContactService contactServiceObj;
+&nbsp;
+&nbsp;  @Autowired private AddressBookService addressBookServiceObj;
+&nbsp;
+&nbsp;  // For Test Only
+&nbsp;  public AddressBookRestController(
+<b class="fc">&nbsp;      ContactService contactService, AddressBookService addressBookService) {</b>
+<b class="fc">&nbsp;    this.contactServiceObj = contactService;</b>
+<b class="fc">&nbsp;    this.addressBookServiceObj = addressBookService;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @PostMapping(value = &quot;&quot;, headers = &quot;Accept=application/json&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;AddressBook API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on AddressBook entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Add New Address Book&quot;,
+&nbsp;      description = &quot;This API allows to add a new Address Book to the existing collection.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Unsuccessful, Bad Request&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity addNewAddressBook(@NonNull @RequestBody final AddressBook addressBook) {
+<b class="fc">&nbsp;    AddressBook savedAddressBook = addressBookServiceObj.addNewAddressBook(addressBook);</b>
+<b class="fc">&nbsp;    if (savedAddressBook != null) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(savedAddressBook, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(</b>
+&nbsp;          &quot;Unable to save AddressBook, Bad Request&quot;, HttpStatus.BAD_REQUEST);
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(value = &quot;/{addressBookId}&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;AddressBook API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on AddressBook entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Delete An Existing Address Book Using Address Book Id&quot;,
+&nbsp;      description =
+&nbsp;          &quot;This API allows to delete an already existing Address Book, only if it is empty.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(
+&nbsp;            responseCode = &quot;400&quot;,
+&nbsp;            description = &quot;Unsuccessful, doesn&#39;t exist or violates foreign key constraints&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity deleteAddressBookById(@PathVariable final String addressBookId) {
+<b class="fc">&nbsp;    boolean isDeleted = addressBookServiceObj.deleteAddressBookById(addressBookId);</b>
+<b class="fc">&nbsp;    if (isDeleted) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(&quot;AddressBook has been successfully deleted.&quot;, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(</b>
+&nbsp;          &quot;Unable to delete AddressBook, resource doesn&#39;t exist or &quot;
+&nbsp;              + &quot;deletion violates foreign key constraints&quot;,
+&nbsp;          HttpStatus.BAD_REQUEST);
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;AddressBook API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on AddressBook entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Get List Of All Address Books&quot;,
+&nbsp;      description =
+&nbsp;          &quot;This API fetches a list of existing address books from the collection, sorted(ASC) by id.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;No Content (empty list) to return&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getAllAddressBooks() {
+<b class="fc">&nbsp;    List&lt;AddressBook&gt; addressBooks = addressBookServiceObj.getAllAddressBooks();</b>
+<b class="fc">&nbsp;    if (addressBooks.size() &gt; 0) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(addressBooks, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(addressBooks, HttpStatus.NO_CONTENT);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;/{addressBookId}&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;AddressBook API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on AddressBook entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Get An Address Book Using Address Book Id&quot;,
+&nbsp;      description = &quot;This API fetches an existing address book from the collection by id.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Unsuccessful, Record Not Found&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getAddressBookById(@PathVariable final String addressBookId) {
+<b class="fc">&nbsp;    AddressBook addressBook = addressBookServiceObj.getAddressBookById(addressBookId);</b>
+<b class="fc">&nbsp;    if (addressBook != null) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(addressBook, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(&quot;Unable to find the Address Book.&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @PutMapping(value = &quot;/{addressBookId}&quot;, headers = &quot;Accept=application/json&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;AddressBook API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on AddressBook entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Update An Address Book Using Address Book Id&quot;,
+&nbsp;      description = &quot;This API allows to update any details for an existing Address Book entity.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Unsuccessful, Record Not Found&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity updateAddressBook(
+&nbsp;      @PathVariable final String addressBookId,
+&nbsp;      @NonNull @RequestBody final AddressBook addressBook) {
+<b class="fc">&nbsp;    AddressBook updatedAddressBook =</b>
+<b class="fc">&nbsp;        addressBookServiceObj.updateAddressBook(addressBookId, addressBook);</b>
+<b class="fc">&nbsp;    if (updatedAddressBook != null) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(updatedAddressBook, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(</b>
+&nbsp;          &quot;Unable to update addressBook, addressBook does not exist.&quot;, HttpStatus.NOT_FOUND);
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @PostMapping(value = &quot;/{addressBookId}/contacts&quot;, headers = &quot;Accept=application/json&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Add A Contact To An Address Book&quot;,
+&nbsp;      description = &quot;This API allows to add a new contact to an existing Address Book.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(
+&nbsp;            responseCode = &quot;400&quot;,
+&nbsp;            description = &quot;Unsuccessful, violates uniqueness or foreign key constraint.&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity addContactInAddressBook(
+&nbsp;      @PathVariable @NonNull final String addressBookId,
+&nbsp;      @NonNull @RequestBody final Contact contact) {
+<b class="fc">&nbsp;    Contact addedContact = contactServiceObj.addContactInAddressBook(addressBookId, contact);</b>
+<b class="fc">&nbsp;    if (addedContact != null) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(addedContact, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(</b>
+&nbsp;          &quot;Unable to add new contact, violating either uniqueness (duplicate) or &quot;
+&nbsp;              + &quot;foreign key (missing addressBook) constraint.&quot;,
+&nbsp;          HttpStatus.BAD_REQUEST);
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(value = &quot;/{addressBookId}/contacts/{contactId}&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Delete A Contact From An Address Book Using Contact Id&quot;,
+&nbsp;      description =
+&nbsp;          &quot;This API allows to delete a contact (if exists) from an existing Address Book.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Unsuccessful, Record Not Found&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity deleteContactByIdInAddressBook(
+&nbsp;      @PathVariable final String addressBookId, @PathVariable final Long contactId) {
+<b class="fc">&nbsp;    boolean isDeleted = contactServiceObj.deleteContactByIdInAddressBook(addressBookId, contactId);</b>
+<b class="fc">&nbsp;    if (isDeleted) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(&quot;Contact has been successfully deleted.&quot;, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(&quot;Unable to delete Contact, Not Found.&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;/{addressBookId}/contacts/{contactId}&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Get A Contact From An Address Book Using Contact Id&quot;,
+&nbsp;      description = &quot;This API fetches specific contact (if exists) from an existing Address Book.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Unsuccessful, Record Not Found&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getContactByIdInAddressBook(
+&nbsp;      @PathVariable final String addressBookId, @PathVariable final Long contactId) {
+<b class="fc">&nbsp;    Contact contact = contactServiceObj.getContactByIdInAddressBook(addressBookId, contactId);</b>
+<b class="fc">&nbsp;    if (contact != null) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contact, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(&quot;Unable to find a contact in AddressBook&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;/{addressBookId}/contacts&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Get A List Of All Contacts From An Address Book&quot;,
+&nbsp;      description = &quot;This API fetches list of all contacts from an existing Address Book.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;No Content (empty list) to return&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getAllContactsInAddressBook(@PathVariable final String addressBookId) {
+<b class="fc">&nbsp;    List&lt;Contact&gt; contacts = this.contactServiceObj.getAllContactsInAddressBook(addressBookId);</b>
+<b class="fc">&nbsp;    if (contacts.size() &gt; 0) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.NO_CONTENT);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;/contacts&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Get All unique Contacts Across All Address Books&quot;,
+&nbsp;      description = &quot;This API fetches only unique contacts from all existing Address Books.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;No Content (empty list) to return&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getUniqueContactsInAllAddressBooks() {
+<b class="fc">&nbsp;    List&lt;Contact&gt; contacts = contactServiceObj.getUniqueContactsInAllAddressBooks();</b>
+<b class="fc">&nbsp;    if (contacts.size() &gt; 0) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.NO_CONTENT);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;/{addressBookId}/contacts/search&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Search Contacts By Either First or Last Name In An Address Book&quot;,
+&nbsp;      description =
+&nbsp;          &quot;This API fetches all contacts with first name or last name matching &quot;
+&nbsp;              + &quot;to the search field from an Address Book.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;No Content (empty list) to return&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getContactsBySearchFieldInOneAddressBook(
+&nbsp;      @PathVariable final String addressBookId, @RequestParam(value = &quot;name&quot;) final String name) {
+<b class="fc">&nbsp;    List&lt;Contact&gt; contacts =</b>
+<b class="fc">&nbsp;        contactServiceObj.getContactsBySearchFieldInOneAddressBook(addressBookId, name);</b>
+<b class="fc">&nbsp;    if (contacts.size() &gt; 0) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.NO_CONTENT);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(value = &quot;/contacts/search&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Search Contacts By Either First or Last Name In All Address Book&quot;,
+&nbsp;      description =
+&nbsp;          &quot;This API fetches all contacts with first name or last name matching &quot;
+&nbsp;              + &quot;to the search field from all Address Books.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;No Content (empty list) to return&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity getContactsBySearchFieldInAllAddressBooks(
+&nbsp;      @RequestParam(&quot;name&quot;) final String name) {
+<b class="fc">&nbsp;    List&lt;Contact&gt; contacts = contactServiceObj.getContactsBySearchFieldInAllAddressBooks(name);</b>
+<b class="fc">&nbsp;    if (contacts.size() &gt; 0) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(contacts, HttpStatus.NO_CONTENT);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @PutMapping(value = &quot;/{addressBookId}/contacts/{contactId}&quot;, headers = &quot;Accept=application/json&quot;)
+&nbsp;  @Tag(
+&nbsp;      name = &quot;Contacts API(s)&quot;,
+&nbsp;      description = &quot;List of API(s) to perform CRUD operation on Contact entity.&quot;)
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Update A Contact In An Address Book Using Contact Id&quot;,
+&nbsp;      description =
+&nbsp;          &quot;This API allows to update any field in a Contact (if exists) in an Address Book.&quot;)
+&nbsp;  @ApiResponses(
+&nbsp;      value = {
+&nbsp;        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful request&quot;),
+&nbsp;        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Unsuccessful, Record Not Found&quot;)
+&nbsp;      })
+&nbsp;  public ResponseEntity updateContactInAddressBook(
+&nbsp;      @PathVariable final String addressBookId,
+&nbsp;      @PathVariable final Long contactId,
+&nbsp;      @NonNull @RequestBody final Contact contact) {
+<b class="fc">&nbsp;    Contact updatedContact =</b>
+<b class="fc">&nbsp;        contactServiceObj.updateContactInAddressBook(addressBookId, contactId, contact);</b>
+<b class="fc">&nbsp;    if (updatedContact != null) {</b>
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(updatedContact, HttpStatus.OK);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return new ResponseEntity&lt;&gt;(</b>
+&nbsp;          &quot;Unable to update contact, contact / addressBook does not exist or violates uniqueness property.&quot;,
+&nbsp;          HttpStatus.NOT_FOUND);
+&nbsp;    }
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-08 17:34</div>
+</div>
+</body>
+</html>
